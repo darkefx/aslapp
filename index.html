@@ -499,7 +499,7 @@ async function loadModel() {
     overlayMsg.textContent = 'Loading AI model...';
     // Try loadLayersModel first, fall back to loadGraphModel
     try {
-      model = await tf.loadLayersModel(MODEL_URL);
+      model = await tf.loadGraphModel(MODEL_URL);
       console.log('Loaded as layers model');
     } catch(e1) {
       console.log('Layers model failed, trying graph model...', e1.message);
