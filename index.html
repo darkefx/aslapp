@@ -54,6 +54,7 @@
     padding: 1.5rem 2rem;
     border-bottom: 1px solid var(--border);
     display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
   }
 
   .logo {
@@ -64,6 +65,28 @@
     color: var(--accent);
     text-transform: uppercase;
   }
+
+  .header-right {
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .mode-btn {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .mode-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .mode-btn:hover { opacity: 0.85; }
 
   .status-pill {
     display: flex; align-items: center; gap: 8px;
@@ -83,6 +106,10 @@
   }
   .status-dot.live { background: var(--success); box-shadow: 0 0 8px var(--success); }
   .status-dot.error { background: var(--danger); }
+
+  /* ── SIGN MODE (default) ── */
+  #signMode { display: block; }
+  #textMode  { display: none; }
 
   main {
     position: relative; z-index: 10;
@@ -272,118 +299,151 @@
     width: 2px; height: 1.2em;
     background: var(--accent);
     vertical-align: middle;
-    animation: blink 1s step-end infinite;
     margin-left: 2px;
+    animation: blink 1s step-end infinite;
   }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  @keyframes blink { 50% { opacity: 0; } }
 
   .sentence-actions {
-    display: flex; gap: 8px; margin-top: 1rem;
+    display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;
   }
 
   .btn-sm {
-    flex: 1;
-    padding: 8px;
+    padding: 6px 14px;
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.78rem;
     font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
     cursor: pointer;
-    transition: all 0.15s;
-    text-transform: uppercase;
+    transition: background 0.15s;
   }
-  .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
-
-  .top-preds {
-    display: flex; flex-direction: column; gap: 6px;
-  }
+  .btn-sm:hover { background: var(--border); }
 
   .top-pred-row {
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 0.5rem;
   }
-
   .top-pred-char {
-    font-family: var(--mono);
-    font-weight: 700;
-    font-size: 0.85rem;
-    width: 28px;
-    color: var(--text);
+    font-family: var(--mono); font-size: 0.85rem;
+    font-weight: 700; width: 32px; color: var(--text);
   }
-
   .top-pred-bar-wrap {
-    flex: 1;
-    height: 3px;
-    background: var(--surface2);
-    border-radius: 2px;
-    overflow: hidden;
+    flex: 1; height: 4px; background: var(--surface2);
+    border-radius: 2px; overflow: hidden;
   }
-
-  .top-pred-bar {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.2s;
-  }
-
+  .top-pred-bar { height: 100%; border-radius: 2px; transition: width 0.2s; }
   .top-pred-pct {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--muted);
-    width: 36px;
-    text-align: right;
+    font-family: var(--mono); font-size: 0.75rem;
+    color: var(--muted); width: 36px; text-align: right;
   }
 
-  .instructions {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.7;
-  }
+  .instructions { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+  .instructions strong { color: var(--accent2); }
 
-  .instructions strong {
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  .model-status {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-    text-align: center;
-    padding: 1rem;
-  }
-
-  .loading-bar {
-    height: 2px;
-    background: var(--surface2);
-    border-radius: 1px;
-    margin-top: 8px;
-    overflow: hidden;
-  }
-
-  .loading-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 1px;
-    animation: loadpulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes loadpulse {
-    0% { width: 0%; margin-left: 0; }
-    50% { width: 60%; margin-left: 20%; }
-    100% { width: 0%; margin-left: 100%; }
-  }
-
-  .letter-commit {
-    animation: commitPop 0.3s ease;
-  }
-  @keyframes commitPop {
+  @keyframes letter-pop {
     0% { transform: scale(1.4); color: var(--accent2); }
     100% { transform: scale(1); }
   }
 
   canvas { display: none; }
+
+  /* ── TEXT → SIGNS MODE ── */
+  #textMode {
+    position: relative; z-index: 10;
+    max-width: 1100px; margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .text-mode-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .text-mode-inner h2 {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .text-mode-inner p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  #textInput {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 1.1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 1.5rem;
+  }
+  #textInput:focus { border-color: var(--accent); }
+  #textInput::placeholder { color: var(--muted); }
+
+  .signs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .sign-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    min-width: 100px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .sign-card img {
+    width: 90px; height: 90px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .sign-card .sign-letter {
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .sign-card .sign-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+  }
+
+  .signs-empty {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 2rem 0;
+  }
 </style>
 </head>
 <body>
@@ -392,75 +452,94 @@
 
 <header>
   <div class="logo">The Silent Gap &mdash; ASL Live</div>
-  <div class="status-pill">
-    <div class="status-dot" id="statusDot"></div>
-    <span id="statusText">loading model</span>
+  <div class="header-right">
+    <button class="mode-btn active" id="btnSignMode" onclick="setMode('sign')">✋ Signs → Text</button>
+    <button class="mode-btn" id="btnTextMode" onclick="setMode('text')">⌨️ Text → Signs</button>
+    <div class="status-pill">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">loading model</span>
+    </div>
   </div>
 </header>
 
-<main>
-  <div class="camera-section">
-    <div class="camera-wrap">
-      <div class="corner tl"></div>
-      <div class="corner tr"></div>
-      <div class="corner bl"></div>
-      <div class="corner br"></div>
-      <video id="video" autoplay playsinline muted></video>
-      <div class="camera-overlay" id="overlay">
-        <p id="overlayMsg">Loading model...</p>
-        <button id="startBtn" disabled>Start Camera</button>
+<!-- SIGN → TEXT MODE -->
+<div id="signMode">
+  <main>
+    <div class="camera-section">
+      <div class="camera-wrap">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <video id="video" autoplay playsinline muted></video>
+        <div class="camera-overlay" id="overlay">
+          <p id="overlayMsg">Loading model...</p>
+          <button id="startBtn" disabled>Start Camera</button>
+        </div>
+      </div>
+
+      <div class="prediction-bar">
+        <div class="pred-letter" id="predLetter">—</div>
+        <div class="pred-info">
+          <div class="pred-label">Current prediction</div>
+          <div class="confidence-bar">
+            <div class="confidence-fill" id="confFill"></div>
+          </div>
+          <div class="confidence-val" id="confVal">0%</div>
+        </div>
+        <div class="hold-indicator">
+          <div class="hold-ring" id="holdRing">
+            <svg viewBox="0 0 44 44">
+              <circle cx="22" cy="22" r="20" id="holdCircle"></circle>
+            </svg>
+          </div>
+          <div class="hold-text">hold</div>
+        </div>
       </div>
     </div>
 
-    <div class="prediction-bar">
-      <div class="pred-letter" id="predLetter">—</div>
-      <div class="pred-info">
-        <div class="pred-label">Current prediction</div>
-        <div class="confidence-bar">
-          <div class="confidence-fill" id="confFill"></div>
+    <div class="sidebar">
+      <div class="panel">
+        <div class="panel-title">Sentence builder</div>
+        <div class="sentence-display" id="sentence"><span class="cursor"></span></div>
+        <div class="sentence-actions">
+          <button class="btn-sm" onclick="deleteChar()">⌫ Delete</button>
+          <button class="btn-sm" onclick="addSpace()">Space</button>
+          <button class="btn-sm" onclick="clearAll()">Clear</button>
         </div>
-        <div class="confidence-val" id="confVal">0%</div>
       </div>
-      <div class="hold-indicator">
-        <div class="hold-ring" id="holdRing">
-          <svg viewBox="0 0 44 44">
-            <circle cx="22" cy="22" r="20" id="holdCircle"></circle>
-          </svg>
+
+      <div class="panel">
+        <div class="panel-title">Top predictions</div>
+        <div class="top-preds" id="topPreds">
+          <div style="color:var(--muted);font-size:0.8rem;font-family:var(--mono)">waiting...</div>
         </div>
-        <div class="hold-text">hold</div>
       </div>
+
+      <div class="panel">
+        <div class="panel-title">How to use</div>
+        <div class="instructions">
+          <strong>Show your hand</strong> to the camera and hold an ASL sign.<br><br>
+          <strong>Hold still</strong> for 2 seconds — the ring fills up and the letter commits automatically.<br><br>
+          <strong>Confidence &gt;80%</strong> triggers the hold timer. Lower confidence resets it.<br><br>
+          Use <strong>Delete</strong> to remove the last letter, or <strong>Clear</strong> to start over.
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- TEXT → SIGNS MODE -->
+<div id="textMode">
+  <div class="text-mode-inner">
+    <h2>Text → Signs</h2>
+    <p>Type any word or sentence and see the ASL hand sign for each letter.</p>
+    <input type="text" id="textInput" placeholder="Type here... e.g. HELLO" maxlength="40" oninput="renderSigns()" />
+    <div class="signs-grid" id="signsGrid">
+      <div class="signs-empty">Start typing to see ASL signs...</div>
     </div>
   </div>
-
-  <div class="sidebar">
-    <div class="panel">
-      <div class="panel-title">Sentence builder</div>
-      <div class="sentence-display" id="sentence"><span class="cursor"></span></div>
-      <div class="sentence-actions">
-        <button class="btn-sm" onclick="deleteChar()">⌫ Delete</button>
-        <button class="btn-sm" onclick="addSpace()">Space</button>
-        <button class="btn-sm" onclick="clearAll()">Clear</button>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-title">Top predictions</div>
-      <div class="top-preds" id="topPreds">
-        <div style="color:var(--muted);font-size:0.8rem;font-family:var(--mono)">waiting...</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-title">How to use</div>
-      <div class="instructions">
-        <strong>Show your hand</strong> to the camera and hold an ASL sign.<br><br>
-        <strong>Hold still</strong> for 2 seconds — the ring fills up and the letter commits automatically.<br><br>
-        <strong>Confidence &gt;80%</strong> triggers the hold timer. Lower confidence resets it.<br><br>
-        Use <strong>Delete</strong> to remove the last letter, or <strong>Clear</strong> to start over.
-      </div>
-    </div>
-  </div>
-</main>
+</div>
 
 <canvas id="canvas"></canvas>
 
@@ -472,12 +551,43 @@ const HOLD_TIME = 2000;
 const CONF_THRESHOLD = 0.80;
 const MODEL_URL = './tfjs_model/model.json';
 
+// ASL reference images from a public domain source
+const ASL_IMAGES = {
+  'A': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/a.gif',
+  'B': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/b.gif',
+  'C': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/c.gif',
+  'D': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/d.gif',
+  'E': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/e.gif',
+  'F': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/f.gif',
+  'G': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/g.gif',
+  'H': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/h.gif',
+  'I': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/i.gif',
+  'J': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/j.gif',
+  'K': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/k.gif',
+  'L': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/l.gif',
+  'M': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/m.gif',
+  'N': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/n.gif',
+  'O': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/o.gif',
+  'P': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/p.gif',
+  'Q': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/q.gif',
+  'R': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/r.gif',
+  'S': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/s.gif',
+  'T': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/t.gif',
+  'U': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/u.gif',
+  'V': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/v.gif',
+  'W': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/w.gif',
+  'X': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/x.gif',
+  'Y': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/y.gif',
+  'Z': 'https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/z.gif',
+};
+
 let model = null;
 let streaming = false;
 let sentence = '';
 let holdStart = null;
 let lastPred = null;
 let animFrame = null;
+let currentMode = 'sign';
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
@@ -494,12 +604,43 @@ const holdCircle = document.getElementById('holdCircle');
 const sentenceEl = document.getElementById('sentence');
 const topPredsEl = document.getElementById('topPreds');
 
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('signMode').style.display = mode === 'sign' ? 'block' : 'none';
+  document.getElementById('textMode').style.display  = mode === 'text'  ? 'block' : 'none';
+  document.getElementById('btnSignMode').classList.toggle('active', mode === 'sign');
+  document.getElementById('btnTextMode').classList.toggle('active', mode === 'text');
+}
+
+function renderSigns() {
+  const input = document.getElementById('textInput').value.toUpperCase();
+  const grid = document.getElementById('signsGrid');
+  if (!input.trim()) {
+    grid.innerHTML = '<div class="signs-empty">Start typing to see ASL signs...</div>';
+    return;
+  }
+  grid.innerHTML = input.split('').map(ch => {
+    if (ch === ' ') {
+      return `<div class="sign-card">
+        <div style="width:90px;height:90px;display:flex;align-items:center;justify-content:center;background:var(--surface);border-radius:8px;font-size:2rem;">␣</div>
+        <div class="sign-letter">SPC</div>
+        <div class="sign-label">space</div>
+      </div>`;
+    }
+    if (!ASL_IMAGES[ch]) return '';
+    return `<div class="sign-card">
+      <img src="${ASL_IMAGES[ch]}" alt="ASL ${ch}" onerror="this.style.display='none'"/>
+      <div class="sign-letter">${ch}</div>
+      <div class="sign-label">ASL ${ch}</div>
+    </div>`;
+  }).join('');
+}
+
 async function loadModel() {
   try {
     overlayMsg.textContent = 'Loading AI model...';
-    // Try loadLayersModel first, fall back to loadGraphModel
     try {
-      model = await tf.loadGraphModel(MODEL_URL);
+      model = await tf.loadLayersModel(MODEL_URL);
       console.log('Loaded as layers model');
     } catch(e1) {
       console.log('Layers model failed, trying graph model...', e1.message);
@@ -542,9 +683,7 @@ startBtn.addEventListener('click', async () => {
 
 async function predict() {
   if (!streaming || !model) return;
-
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
   const tensor = tf.tidy(() => {
     const img = tf.browser.fromPixels(canvas);
     const resized = tf.image.resizeBilinear(img, [224, 224]);
@@ -552,18 +691,14 @@ async function predict() {
     const normalized = float.div(127.5).sub(1.0);
     return normalized.expandDims(0);
   });
-
   const preds = await model.predict(tensor).data();
   tensor.dispose();
-
   const arr = Array.from(preds);
   const topIdx = arr.reduce((a, b, i) => arr[a] > b ? a : i, 0);
   const topConf = arr[topIdx];
   const topClass = CLASSES[topIdx];
-
   updateUI(topClass, topConf, arr);
   handleHold(topClass, topConf);
-
   animFrame = requestAnimationFrame(predict);
 }
 
@@ -573,10 +708,7 @@ function updateUI(cls, conf, arr) {
   const pct = Math.round(conf * 100);
   confFill.style.width = pct + '%';
   confVal.textContent = pct + '%';
-
-  const sorted = arr.map((v, i) => ({c: CLASSES[i], v}))
-    .sort((a, b) => b.v - a.v).slice(0, 5);
-
+  const sorted = arr.map((v, i) => ({c: CLASSES[i], v})).sort((a, b) => b.v - a.v).slice(0, 5);
   const colors = ['#7c6af7','#9d8ff9','#b8adfb','#d0c9fd','#e5e2fe'];
   topPredsEl.innerHTML = sorted.map((p, i) => `
     <div class="top-pred-row">
@@ -591,26 +723,17 @@ function updateUI(cls, conf, arr) {
 
 function handleHold(cls, conf) {
   if (conf < CONF_THRESHOLD || cls === 'nothing') {
-    holdStart = null;
-    lastPred = null;
+    holdStart = null; lastPred = null;
     holdCircle.style.strokeDashoffset = '138';
     return;
   }
-
-  if (lastPred !== cls) {
-    holdStart = Date.now();
-    lastPred = cls;
-  }
-
+  if (lastPred !== cls) { holdStart = Date.now(); lastPred = cls; }
   const elapsed = Date.now() - holdStart;
   const progress = Math.min(elapsed / HOLD_TIME, 1);
-  const offset = 138 - (138 * progress);
-  holdCircle.style.strokeDashoffset = offset;
-
+  holdCircle.style.strokeDashoffset = 138 - (138 * progress);
   if (progress >= 1) {
     commitLetter(cls);
-    holdStart = null;
-    lastPred = null;
+    holdStart = null; lastPred = null;
     holdCircle.style.strokeDashoffset = '138';
   }
 }
@@ -636,6 +759,7 @@ function clearAll() { sentence = ''; renderSentence(); }
 
 loadModel();
 </script>
+
 <div style="position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 2rem 3rem;">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;font-family:var(--mono);font-size:0.78rem;color:var(--muted);line-height:2;">
     <div style="color:var(--accent2);">// built by team KOOL — AI Hackathon 2026</div>
